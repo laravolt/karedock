@@ -21,6 +21,8 @@ volumes:
         driver: ${VOLUMES_DRIVER}
     camunda:
         driver: ${VOLUMES_DRIVER}
+    metabase:
+        driver: ${VOLUMES_DRIVER}
 
 services:
     ### MySQL ################################################
@@ -140,4 +142,25 @@ services:
             - 8051:8080
         networks:
             - frontend
+            - backend
+
+    ### Metabase #############################################
+    metabase:
+        image: metabase/metabase:${METABASE_VERSION}
+        depends_on:
+            - postgres
+        environment:
+            - MB_DB_FILE=/metabase-data/${METABASE_DB_FILE}
+            - JAVA_TIMEZONE=${TIMEZONE}
+            - MB_DB_TYPE=postgres
+            - MB_DB_DBNAME=${METABASE_POSTGRES_DB}
+            - MB_DB_PORT=5432
+            - MB_DB_USER=${METABASE_POSTGRES_USER}
+            - MB_DB_PASS=${METABASE_POSTGRES_PASSWORD}
+            - MB_DB_HOST=postgres
+        ports:
+            - ${METABASE_PORT}:3000
+        volumes:
+            - ${DATA_PATH_HOST}/metabase-data:/metabase-data
+        networks:
             - backend
