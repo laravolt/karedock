@@ -1,0 +1,2 @@
+*.sh
+!init_camunda_db.sh
