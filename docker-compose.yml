@@ -30,20 +30,20 @@ services:
         build:
             context: ./mysql
             args:
-            - MYSQL_VERSION=${MYSQL_VERSION}
+                - MYSQL_VERSION=${MYSQL_VERSION}
         environment:
-        - MYSQL_DATABASE=${MYSQL_DATABASE}
-        - MYSQL_USER=${MYSQL_USER}
-        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-        - TZ=${TIMEZONE}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - TZ=${TIMEZONE}
         volumes:
-        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
-        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+            - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+            - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
         ports:
-        - "${MYSQL_PORT}:3306"
+            - "${MYSQL_PORT}:3306"
         networks:
-        - backend
+            - backend
 
     ### PostgreSQL ###########################################
     postgres:
@@ -138,6 +138,8 @@ services:
             - DB_PASSWORD=${CAMUNDA_POSTGRES_PASSWORD}
             - WAIT_FOR=postgres:5432
             - TZ=${TIMEZONE}
+        volumes:
+            - ${DATA_PATH_HOST}/camunda:/camunda
         ports:
             - 8051:8080
         networks:
