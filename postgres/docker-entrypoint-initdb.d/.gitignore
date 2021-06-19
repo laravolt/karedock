@@ -1,3 +1,4 @@
 *.sh
 !init_camunda_db.sh
 !init_metabase_db.sh
+!init_nextcloud_db.sh
