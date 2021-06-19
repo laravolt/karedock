@@ -124,8 +124,8 @@ services:
         ports:
             - "${MINIO_PORT}:9000"
         environment:
-            - MINIO_ACCESS_KEY=access
-            - MINIO_SECRET_KEY=secretkey
+            - MINIO_ACCESS_KEY=${MINIO_USERNAME}
+            - MINIO_SECRET_KEY=${MINIO_PASSWORD}
         networks:
             - frontend
             - backend
@@ -145,7 +145,7 @@ services:
         volumes:
             - ${DATA_PATH_HOST}/camunda:/camunda
         ports:
-            - 8051:8080
+            - ${CAMUNDA_PORT}:8080
         networks:
             - frontend
             - backend
