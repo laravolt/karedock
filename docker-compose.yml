@@ -23,6 +23,8 @@ volumes:
         driver: ${VOLUMES_DRIVER}
     metabase:
         driver: ${VOLUMES_DRIVER}
+    nextcloud:
+        driver: ${VOLUMES_DRIVER}
 
 services:
     ### MySQL ################################################
@@ -68,6 +70,10 @@ services:
             - METABASE_POSTGRES_DB=${METABASE_POSTGRES_DB}
             - METABASE_POSTGRES_USER=${METABASE_POSTGRES_USER}
             - METABASE_POSTGRES_PASSWORD=${METABASE_POSTGRES_PASSWORD}
+            - NEXTCLOUD_POSTGRES_INIT=${NEXTCLOUD_POSTGRES_INIT}
+            - NEXTCLOUD_POSTGRES_DB=${NEXTCLOUD_POSTGRES_DB}
+            - NEXTCLOUD_POSTGRES_USER=${NEXTCLOUD_POSTGRES_USER}
+            - NEXTCLOUD_POSTGRES_PASSWORD=${NEXTCLOUD_POSTGRES_PASSWORD}
         networks:
             - backend
 
@@ -169,4 +175,23 @@ services:
         volumes:
             - ${DATA_PATH_HOST}/metabase-data:/metabase-data
         networks:
+            - backend
+
+    ### Nextcloud ############################################
+    nextcloud:
+        image: nextcloud
+        restart: always
+        ports:
+            - ${NEXTCLOUD_PORT}:80
+        links:
+            - postgres
+        volumes:
+            - ${DATA_PATH_HOST}/nextcloud:/var/www/html
+        environment:
+            - POSTGRES_HOST=${NEXTCLOUD_POSTGRES_HOST}
+            - POSTGRES_DB=${NEXTCLOUD_POSTGRES_DB}
+            - POSTGRES_USER=${NEXTCLOUD_POSTGRES_USER}
+            - POSTGRES_PASSWORD=${NEXTCLOUD_POSTGRES_PASSWORD}
+        networks:
+            - frontend
             - backend
