@@ -6,26 +6,6 @@ networks:
     backend:
         driver: ${NETWORKS_DRIVER}
 
-volumes:
-    mysql:
-        driver: ${VOLUMES_DRIVER}
-    postgres:
-        driver: ${VOLUMES_DRIVER}
-    redis:
-        driver: ${VOLUMES_DRIVER}
-    mariadb:
-        driver: ${VOLUMES_DRIVER}
-    mongo:
-        driver: ${VOLUMES_DRIVER}
-    minio:
-        driver: ${VOLUMES_DRIVER}
-    camunda:
-        driver: ${VOLUMES_DRIVER}
-    metabase:
-        driver: ${VOLUMES_DRIVER}
-    nextcloud:
-        driver: ${VOLUMES_DRIVER}
-
 services:
     ### MySQL ################################################
     mysql:
@@ -199,3 +179,32 @@ services:
         networks:
             - frontend
             - backend
+
+    ### Proxy ################################################
+    proxy:
+        image: jc21/nginx-proxy-manager:latest
+        restart: unless-stopped
+        ports:
+            # Public HTTP Port:
+            - ${NEXTCLOUD_PORT_HTTP}:80
+            # Public HTTPS Port:
+            - ${NEXTCLOUD_PORT_HTTPS}:443
+            # Admin Web Port:
+            - ${NEXTCLOUD_PORT_ADMIN}:81
+        environment:
+            # These are the settings to access your db
+            DB_MYSQL_HOST: mysql
+            DB_MYSQL_PORT: 3306
+            DB_MYSQL_USER: default
+            DB_MYSQL_PASSWORD: secret
+            DB_MYSQL_NAME: proxies
+            # If you would rather use Sqlite uncomment this
+            # and remove all DB_MYSQL_* lines above
+            # DB_SQLITE_FILE: "/data/database.sqlite"
+            # Uncomment this if IPv6 is not enabled on your host
+            # DISABLE_IPV6: 'true'
+        volumes:
+            - ${DATA_PATH_HOST}/proxy/data:/data
+            - ${DATA_PATH_HOST}/proxy/letsencrypt:/etc/letsencrypt
+        depends_on:
+            - mysql
