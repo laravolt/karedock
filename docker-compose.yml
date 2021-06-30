@@ -186,11 +186,11 @@ services:
         restart: unless-stopped
         ports:
             # Public HTTP Port:
-            - ${NEXTCLOUD_PORT_HTTP}:80
+            - ${PROXY_PORT_HTTP}:80
             # Public HTTPS Port:
-            - ${NEXTCLOUD_PORT_HTTPS}:443
+            - ${PROXY_PORT_HTTPS}:443
             # Admin Web Port:
-            - ${NEXTCLOUD_PORT_ADMIN}:81
+            - ${PROXY_PORT_ADMIN}:81
         environment:
             # These are the settings to access your db
             DB_MYSQL_HOST: mysql
