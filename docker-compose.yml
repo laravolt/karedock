@@ -128,10 +128,10 @@ services:
             - DB_PASSWORD=${CAMUNDA_POSTGRES_PASSWORD}
             - WAIT_FOR=postgres:5432
             - TZ=${TIMEZONE}
-        volumes:
-            - ${DATA_PATH_HOST}/camunda:/camunda
         ports:
             - ${CAMUNDA_PORT}:8080
+        links:
+            - postgres
         networks:
             - frontend
             - backend
