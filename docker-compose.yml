@@ -42,10 +42,6 @@ services:
             - POSTGRES_DB=${POSTGRES_DB}
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - CAMUNDA_POSTGRES_INIT=${CAMUNDA_POSTGRES_INIT}
-            - CAMUNDA_POSTGRES_DB=${CAMUNDA_POSTGRES_DB}
-            - CAMUNDA_POSTGRES_USER=${CAMUNDA_POSTGRES_USER}
-            - CAMUNDA_POSTGRES_PASSWORD=${CAMUNDA_POSTGRES_PASSWORD}
             - METABASE_POSTGRES_INIT=${METABASE_POSTGRES_INIT}
             - METABASE_POSTGRES_DB=${METABASE_POSTGRES_DB}
             - METABASE_POSTGRES_USER=${METABASE_POSTGRES_USER}
@@ -112,26 +108,6 @@ services:
         environment:
             - MINIO_ACCESS_KEY=${MINIO_USERNAME}
             - MINIO_SECRET_KEY=${MINIO_PASSWORD}
-        networks:
-            - frontend
-            - backend
-
-    ### Camunda ##############################################
-    camunda:
-        image: camunda/camunda-bpm-platform:${CAMUNDA_VERSION}
-        depends_on:
-            - postgres
-        environment:
-            - DB_DRIVER=org.postgresql.Driver
-            - DB_URL=jdbc:postgresql://postgres:5432/${CAMUNDA_POSTGRES_DB}
-            - DB_USERNAME=${CAMUNDA_POSTGRES_USER}
-            - DB_PASSWORD=${CAMUNDA_POSTGRES_PASSWORD}
-            - WAIT_FOR=postgres:5432
-            - TZ=${TIMEZONE}
-        volumes:
-            - ${DATA_PATH_HOST}/camunda:/camunda
-        ports:
-            - ${CAMUNDA_PORT}:8080
         networks:
             - frontend
             - backend
